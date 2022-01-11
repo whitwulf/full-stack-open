@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+const Anecdote = ({ text }) => <p>{text}</p>;
+
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often",
@@ -12,8 +16,34 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0]);
 
-  return <div>{anecdotes[selected]}</div>;
+  const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+  };
+
+  const randIndex = getRandomInt(0, anecdotes.length);
+
+  const setRandAnecdote = () => setSelected(randIndex);
+
+  const upvote = () =>
+    setCount(
+      count
+        .slice(0, selected)
+        .concat(count[selected] + 1, count.slice(selected + 1))
+    );
+
+  return (
+    <div>
+      <Anecdote text={anecdotes[selected]} />
+      <div>
+        <Button onClick={setRandAnecdote} text="next anecdote" />
+        <Button onClick={upvote} text="upvote" />
+      </div>
+    </div>
+  );
 };
 
 export default App;
