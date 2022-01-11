@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-const Anecdote = ({ text }) => <p>{text}</p>;
+const Anecdote = ({ text, voteCount }) => {
+  return (
+    <>
+      <p>{text}</p>
+      <p>Has {voteCount} votes.</p>
+    </>
+  );
+};
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
@@ -16,7 +23,7 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
-  const [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [count, setCount] = useState(Array(anecdotes.length).fill(0));
 
   const getRandomInt = (min, max) => {
     min = Math.ceil(min);
@@ -37,11 +44,16 @@ const App = () => {
 
   return (
     <div>
-      <Anecdote text={anecdotes[selected]} />
+      <Anecdote text={anecdotes[selected]} voteCount={count[selected]} />
       <div>
         <Button onClick={setRandAnecdote} text="next anecdote" />
         <Button onClick={upvote} text="upvote" />
       </div>
+      <p>Anecdote with the most votes is</p>
+      <Anecdote
+        text={anecdotes[count.indexOf(Math.max(...count)) || 0]}
+        voteCount={Math.max(...count)}
+      />
     </div>
   );
 };
